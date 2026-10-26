@@ -38,9 +38,9 @@ dsh plugin --profile test add github:<你的用户名>/dsh-model-vision
 ## 3. 提市场条目
 
 1. fork [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
-2. 把 `docs/market-entry.yml` 复制成 `data/plugins/<用户名>__dsh-model-vision.yml`
-3. 把文件里的 `OWNER` 全部替换成你的用户名（`url`、`name`、`icon` 三处）
-4. 提 PR，标题写「Add dsh-model-vision」
+2. 把 `docs/market-entry.yml` 复制成 `data/plugins/charovo0059__dsh-model-vision.yml`（**恰好一层深**，`readEntries()` 只 glob `data/plugins/*.yml` 不递归）
+3. 条目里的 `url` / `name` / `icon` 已经是真实地址，不需要替换占位符
+4. 提 PR，标题写「Add dsh-model-vision」，body 用 `docs/pr-body.md`
 
 CI 会按顺序检查：条目数量（一 PR 最多 3 条）→ `dsh.bundle` → 仓库满 1 天 → `awesome-lint`。
 **仓库今天刚建的话，第 3 项会挂**，等一天再提。
@@ -51,16 +51,13 @@ CI 会按顺序检查：条目数量（一 PR 最多 3 条）→ `dsh.bundle` �
 
 | 用途 | 文件 | 谁读它 |
 |---|---|---|
-| 市场详情页截图 | `docs/screenshot-button.png`、`docs/screenshot-result.png` | 根目录的 `screenshots.json` |
+| 市场详情页截图 | `docs/screenshot.png`（真截图，1297×768） | 根目录的 `screenshots.json` |
 | 市场卡片图标 | `assets/icon-180.png` | 条目里的 `icon:` |
 | 本地看的效果图 | `docs/icon.png`（512） | README |
 
 规则（市场强制）：截图 1-8 张、路径不能越出插件目录、只认 GitHub 图床；图标必须是位图，SVG 会被拒。
-文案改了以后重新出图：
 
-```bash
-node tools/shots.mjs       # 需要本机有 Edge/Chrome，以及 playwright-core
-```
+截图**必须是真的**。`dsh web` 用进程令牌 cookie 鉴权，无头浏览器拿不到带令牌的地址（`http://127.0.0.1:3080/` 直接回 401），所以只能人工在界面上截：设置 → 模型 → 列表最下面那一行按钮。改文案后重新截一张替换 `docs/screenshot.png` 即可，不需要生成脚本。
 
 ## 5. npm（可选，但已准备好）
 
@@ -69,7 +66,7 @@ node tools/shots.mjs       # 需要本机有 Edge/Chrome，以及 playwright-cor
 - `private` 已删（不删 npm 直接拒发）
 - `publishConfig.registry` 锁死官方源 —— **本机 `~/.npmrc` 指向 npmmirror 只读镜像，不锁的话 `npm publish` 会 403**
 - `files` 收窄到 17 个文件 / 57.5 kB（排除了 `docs/` 里那两张 300KB 的截图，npm 页面的图会回源 GitHub）
-- `prepublishOnly` 已挂上 67 个测试，测试挂了发不出去
+- `prepublishOnly` 已挂上 68 个测试，测试挂了发不出去
 
 ```bash
 npm view dsh-model-vision version                       # 期望 404（名字是你的）
@@ -83,20 +80,6 @@ npm view dsh-model-vision version                       # 验证
 
 ---
 
-## 附：PR 描述可以直接粘这段
+## 附：PR 描述
 
-```
-Adds dsh-model-vision — fills in the vision capability that llm-pi-ai's
-"fetch models" reader drops.
-
-- Reads whatever modality shape the gateway publishes (input, input_modalities,
-  architecture.input_modalities, vision flags).
-- For gateways that publish nothing, probes with two solid-colour images and
-  only declares a model image-capable when it names both colours correctly; an
-  ambiguous answer leaves the model declared as-is.
-- Writes back `input` plus a "· 可看图" suffix on the display name, so the
-  composer's model picker shows it.
-- One button at the bottom of Settings → Models; idempotent, dryRun available.
-
-Category: vision. Repo declares dsh.bundle. Two screenshots via screenshots.json.
-```
+不要从别处复制，直接用 `docs/pr-body.md` 的内容 —— 这里是唯一一份，免得两处说法走散。

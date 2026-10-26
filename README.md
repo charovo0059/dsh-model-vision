@@ -100,7 +100,10 @@ node tools/preview.mjs --profile web
 ### 它判断能力的顺序
 
 1. **先看网关自己怎么写的** —— 写了就照它写，这一步很便宜，不花钱；
-2. **网关没写的模型，才真的发图去问** —— 发一张纯色图问「这是什么颜色」，问两轮、两个不同颜色，都答对了才算能看图。
+2. **网关没写的模型，才真的发图去问** —— 发一张纯色图问「这是什么颜色」，问两个不同颜色：
+   - 答对了任意一个 → 能看图
+   - 答成别的颜色（比如给它红色，它说 purple）→ 看不见图，判为只能读文字
+   - 一个颜色都不提（回了一整段话）→ **没结论**，不写声明
 
 几个你会关心的事：
 
@@ -138,7 +141,7 @@ node tools/preview.mjs --profile web
 
 **最直观的**：设置 → 模型 → 找一个你确定能看图的模型 → 点开「输入类型」→「图片」已经勾上了。
 
-**看记账本**：每次干完活它都会写一份记录到 `~/.dsh/model-vision.status.json`。
+**看记账本**：每次干完活它都会写一份记录到 `~/.dsh/model-vision.<profile>.status.json`（`web` 这个 profile 就是 `model-vision.web.status.json`；没带 profile 名字的旧文件名也会被认）。
 **只看 `message` 这一行就够了**，那是给你写的人话：
 
 ```json
@@ -260,7 +263,7 @@ dsh plugin --profile web remove dsh-model-vision
 | 「获取可用模型」 | 设置 → 模型 里的按钮，点一下把网关的模型清单拉进来勾选 |
 | 「输入类型」 | 每个模型下面能勾「文字 / 图片」的那一组选项 |
 | 「能看图」的模型 | 支持图片输入的模型（多模态） |
-| 状态文件 | `~/.dsh/model-vision.status.json`，它每次干活的记账本 |
+| 状态文件 | `~/.dsh/model-vision.<profile>.status.json`，它每次干活的记账本 |
 
 ---
 
@@ -326,13 +329,13 @@ LlmError: pi-ai model "<id>" does not support image input
 npm test
 
 node test/vision.test.mjs     # 30 个：解析、决策、按行改文件、CRLF、幂等、人话摘要
-node test/wiring.test.mjs     #  9 个：两条写通道、dryRun、凭据、轮询
+node test/wiring.test.mjs     # 10 个：两条写通道、dryRun、凭据、轮询、多 profile 状态文件
 node test/probe.test.mjs      # 12 个：图片字节、请求形状、四种判定（能看/不能看/没结论/故障）
 node test/oneclick.test.mjs   #  9 个：多路径清单、Ollama 形状、一键端点、缓存与上限
 node test/contract.test.mjs   #  7 个：前端与后端对同一批外部名字的约定
 ```
 
-一共 67 个，全部零依赖、不联网（探测测试用本地假网关）。
+一共 68 个，全部零依赖、不联网（探测测试用本地假网关）。
 
 ### 跨版本维护（DSH 升级后看这一节）
 

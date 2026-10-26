@@ -9,7 +9,7 @@
 
 1. 你填的 API 协议（OpenAI Chat Completions / Anthropic / Ollama / Responses）
 2. 网关 `/models` 返回里**那一个模型**的原文片段（去掉 key 和域名）
-3. `~/.dsh/model-vision.status.json` 里的 `message` 和 `routes[0]` 两个字段
+3. `~/.dsh/model-vision.<profile>.status.json` 里的 `message` 和 `routes[0]` 两个字段（`<profile>` 通常就是 `web`；找不到就贴 `~/.dsh/` 下所有 `model-vision*.status.json`）
 
 有这三样，基本能一眼定位是「网关用了它不认识的写法」还是「探测判定错了」。
 
@@ -20,7 +20,7 @@
 ```bash
 git clone https://github.com/charovo0059/dsh-model-vision.git
 cd dsh-model-vision
-npm test          # 67 个用例，零依赖、不联网
+npm test          # 68 个用例，零依赖、不联网
 ```
 
 没有 `npm install` 这一步——这个包故意零依赖，因为它装在 profile 目录之外，
