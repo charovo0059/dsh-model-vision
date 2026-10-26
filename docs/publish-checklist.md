@@ -5,12 +5,19 @@
 ## 1. 推到 GitHub
 
 ```bash
-cd "E:/dsh工作区/dsh-model-vision"
-git config user.name  "你的名字"
-git config user.email "你的邮箱"
+git clone https://github.com/charovo0059/dsh-model-vision.git
+cd dsh-model-vision
+git config user.name  "charovo0059"
+git config user.email "charovo0059@users.noreply.github.com"
+```
+
+首次从零建仓库（已完成，留作记录）：
+
+```bash
+git init -b main
+git add -A
 git commit -m "feat: 补上 DSH 漏记的视觉能力，并在模型名后标出「可看图」"
-git branch -M main
-git remote add origin https://github.com/<你的用户名>/dsh-model-vision.git
+git remote add origin https://github.com/charovo0059/dsh-model-vision.git
 git push -u origin main
 ```
 

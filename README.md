@@ -361,10 +361,13 @@ LlmError: pi-ai model "<id>" does not support image input
 **跑测试**：
 
 ```bash
-node test/vision.test.mjs     # 22 个：解析、决策、按行改文件、CRLF、幂等、人话摘要
+node test/vision.test.mjs     # 30 个：解析、决策、按行改文件、CRLF、幂等、人话摘要
 node test/wiring.test.mjs     # 9 个：两条写通道、dryRun、凭据、轮询
 node test/probe.test.mjs      # 12 个：图片字节、请求形状、四种判定（能看/不能看/没结论/故障）
-node test/oneclick.test.mjs   # 7 个：多路径清单、Ollama 形状、一键端点、缓存与上限
+node test/oneclick.test.mjs   # 9 个：多路径清单、Ollama 形状、一键端点、缓存与上限
+node test/contract.test.mjs   # 7 个：前端与后端对同一批外部名字的约定
 ```
+
+一共 67 个，或者直接 `npm test` 一次跑完。
 
 </details>
