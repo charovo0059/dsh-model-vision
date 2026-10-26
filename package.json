@@ -1,7 +1,6 @@
 {
   "name": "dsh-model-vision",
   "version": "0.5.1",
-  "private": true,
   "description": "让 DSH 自动认出哪些模型能看图：点「获取可用模型」后自动补上「输入类型：图片」，并在模型名后标出「可看图」，不再报「模型不支持图片输入」",
   "keywords": [
     "dsh",
@@ -29,8 +28,6 @@
     "cordis.patch.yml",
     "tools",
     "test",
-    "docs",
-    "assets",
     "screenshots.json",
     "README.md",
     "LICENSE"
@@ -41,7 +38,8 @@
   "scripts": {
     "test": "node test/vision.test.mjs && node test/wiring.test.mjs && node test/probe.test.mjs && node test/oneclick.test.mjs && node test/contract.test.mjs",
     "preview": "node tools/preview.mjs",
-    "check": "node tools/check.mjs"
+    "check": "node tools/check.mjs",
+    "prepublishOnly": "node test/vision.test.mjs && node test/wiring.test.mjs && node test/probe.test.mjs && node test/oneclick.test.mjs && node test/contract.test.mjs"
   },
   "dsh": {
     "bundle": {
@@ -73,5 +71,9 @@
   "author": "charovo0059",
   "bugs": {
     "url": "https://github.com/charovo0059/dsh-model-vision/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   }
 }

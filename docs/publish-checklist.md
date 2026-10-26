@@ -62,15 +62,24 @@ CI 会按顺序检查：条目数量（一 PR 最多 3 条）→ `dsh.bundle` �
 node tools/shots.mjs       # 需要本机有 Edge/Chrome，以及 playwright-core
 ```
 
-## 5. npm（可选）
+## 5. npm（可选，但已准备好）
 
-不上 npm 也能进市场（条目里可以用 GitHub Release 的 `tarball:`）。要发 npm：
+不上 npm 也能进市场（条目里可以用 GitHub Release 的 `tarball:`）。要发的话，包这边已经改好了：
+
+- `private` 已删（不删 npm 直接拒发）
+- `publishConfig.registry` 锁死官方源 —— **本机 `~/.npmrc` 指向 npmmirror 只读镜像，不锁的话 `npm publish` 会 403**
+- `files` 收窄到 17 个文件 / 57.5 kB（排除了 `docs/` 里那两张 300KB 的截图，npm 页面的图会回源 GitHub）
+- `prepublishOnly` 已挂上 67 个测试，测试挂了发不出去
 
 ```bash
-npm publish --access public
+npm view dsh-model-vision version                       # 期望 404（名字是你的）
+npm login --registry=https://registry.npmjs.org         # 登录也要指官方源
+npm publish --dry-run                                   # 先演练，看三行：源/文件数/体积
+npm publish                                             # 需要 2FA 六位数
+npm view dsh-model-vision version                       # 验证
 ```
 
-需要先 `npm login`，并且把 `package.json` 里的 `repository` / `homepage` 改成你的真实地址。之后市场条目会自动带上版本号和下载量。
+之后市场条目会自动带上版本号和下载量。详细的报错对照表和录视频用的分镜脚本见 `docs/npm-publish-video-script.md`。
 
 ---
 

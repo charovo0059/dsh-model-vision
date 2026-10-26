@@ -1,0 +1,70 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: node ${{ matrix.node }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [20, 22, 24]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # This package has no dependencies on purpose: the host half lives outside
+      # the profile directory, where Node cannot resolve the harness's
+      # node_modules, so everything it needs comes from `node:` builtins. There is
+      # nothing to install — `npm ci` would only fail on the missing lockfile.
+      - name: Run the test suite
+        run: npm test
+
+      - name: Check the package still declares what a DSH bundle needs
+        shell: bash
+        run: |
+          node -e '
+            const pkg = require("./package.json")
+            const fail = (m) => { console.error("FAIL: " + m); process.exit(1) }
+            if (pkg.dsh?.bundle?.patch !== "./cordis.patch.yml") fail("dsh.bundle.patch is missing")
+            if (!Array.isArray(pkg.dsh?.client?.inject)) fail("dsh.client.inject must be an array")
+            if (pkg.dsh.client.platform !== "web") fail("dsh.client.platform must be web")
+            for (const f of [pkg.dsh.bundle.patch, pkg.main, "screenshots.json", "LICENSE"]) {
+              if (!require("node:fs").existsSync(f)) fail(f + " is missing")
+            }
+            const shots = require("./screenshots.json").screenshots
+            if (!Array.isArray(shots) || shots.length < 1 || shots.length > 8) fail("screenshots.json must list 1-8 files")
+            for (const s of shots) {
+              if (!require("node:fs").existsSync(s)) fail("declared screenshot is missing: " + s)
+            }
+            console.log("package manifest OK (" + shots.length + " screenshot(s))")
+          '
+
+      - name: Check the published tarball contents
+        shell: bash
+        run: |
+          npm pack --dry-run 2>&1 | tail -40
+          # A plugin installed from the market or from GitHub needs the patch
+          # file and both halves of the bundle inside the tarball.
+          npm pack --dry-run --json > /tmp/pack.json
+          node -e '
+            const info = JSON.parse(require("node:fs").readFileSync("/tmp/pack.json", "utf8"))[0]
+            const names = info.files.map((f) => f.path)
+            const need = ["lib/index.js", "lib/client.js", "lib/probe.js", "cordis.patch.yml", "package.json", "README.md", "LICENSE"]
+            const missing = need.filter((f) => !names.includes(f))
+            if (missing.length > 0) { console.error("missing from tarball: " + missing.join(", ")); process.exit(1) }
+            console.log("tarball OK: " + names.length + " files, " + (info.size / 1024).toFixed(0) + " kB")
+          '
