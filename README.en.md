@@ -54,14 +54,7 @@ This plugin puts that field back.
 
 Restart DSH afterwards.
 
-**Settings → Plugins → Plugin Market** → search `dsh-model-vision` → Install.
-
-> If it is not listed yet (or you cannot find it), use one of the methods below.
-
-<details>
-<summary>From GitHub / from a local clone / self-check / dry run</summary>
-
-### From GitHub
+The market listing is still under review, so install from the command line for now:
 
 ```bash
 dsh plugin --profile web add github:charovo0059/dsh-model-vision
@@ -69,6 +62,11 @@ dsh plugin --profile web add github:charovo0059/dsh-model-vision
 
 This also registers the plugin in `dsh.profile.bundles`; no config editing needed.
 Replace `web` with your profile name if you use a different one.
+
+> Once it is listed you can also use **Settings → Plugins → Plugin Market** → search `dsh-model-vision` → Install.
+
+<details>
+<summary>From a local clone / self-check / dry run</summary>
 
 ### From a local clone (when you are changing the code)
 

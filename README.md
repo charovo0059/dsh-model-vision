@@ -52,14 +52,7 @@
 
 装完都要**重启 DSH**。
 
-**设置 → 插件 → 插件市场** → 搜索 `dsh-model-vision` → 安装。
-
-> 还没上架时（或搜不到）用下面的方式。
-
-<details>
-<summary>从 GitHub 装 / 从本地目录装 / 装完自检 / 先看看它会改什么</summary>
-
-### 从 GitHub 装
+插件市场还在审核，暂时用命令行装：
 
 ```bash
 dsh plugin --profile web add github:charovo0059/dsh-model-vision
@@ -67,6 +60,11 @@ dsh plugin --profile web add github:charovo0059/dsh-model-vision
 
 这条命令会同时把插件登记进 `dsh.profile.bundles`，不用手改配置。
 如果你用的不是默认 profile，把 `web` 换成你的 profile 名。
+
+> 上架之后也可以走 **设置 → 插件 → 插件市场** → 搜索 `dsh-model-vision` → 安装，效果一样。
+
+<details>
+<summary>从本地目录装 / 装完自检 / 先看看它会改什么</summary>
 
 ### 从本地目录装（自己改代码时）
 
