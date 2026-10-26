@@ -28,8 +28,11 @@
     "cordis.patch.yml",
     "tools",
     "test",
+    "assets/icon-180.png",
     "screenshots.json",
     "README.md",
+    "README.en.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "engines": {
@@ -54,7 +57,7 @@
     }
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "*"
+    "@deepseek-ai/cordis": "^4.0.1 || ^4.0.5-alpha.2"
   },
   "peerDependenciesMeta": {
     "@deepseek-ai/cordis": {
