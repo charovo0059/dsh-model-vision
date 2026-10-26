@@ -32,8 +32,11 @@ git push -u origin main
 在一个干净的 profile 里试一次，确认别人也能装：
 
 ```bash
-dsh plugin --profile test add github:<你的用户名>/dsh-model-vision
+dsh plugin --profile test add github:charovo0059/dsh-model-vision
 ```
+
+装完记得 `dsh plugin --profile test remove dsh-model-vision` 再把 `~/.dsh/profiles/test` 删掉，
+别留在机器上（`dsh plugin remove` 会同时把它从 `dsh.profile.bundles` 里摘掉）。
 
 ## 3. 提市场条目
 
@@ -52,8 +55,8 @@ CI 会按顺序检查：条目数量（一 PR 最多 3 条）→ `dsh.bundle` �
 | 用途 | 文件 | 谁读它 |
 |---|---|---|
 | 市场详情页截图 | `docs/screenshot.png`（真截图，1297×768） | 根目录的 `screenshots.json` |
-| 市场卡片图标 | `assets/icon-180.png` | 条目里的 `icon:` |
-| 本地看的效果图 | `docs/icon.png`（512） | README |
+| 市场卡片图标 | `assets/icon-180.png` | 条目里的 `icon:`，以及 `package.json` 的 `icon`（DSH 插件列表用它） |
+| 设计稿 | `docs/icon.png`（512）、`assets/icon.html` | 只留档，不进 npm 包 |
 
 规则（市场强制）：截图 1-8 张、路径不能越出插件目录、只认 GitHub 图床；图标必须是位图，SVG 会被拒。
 
