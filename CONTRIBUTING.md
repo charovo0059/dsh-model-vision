@@ -74,6 +74,21 @@ fix: 认出 vLLM 的 architecture.input_modalities
 `docs/screenshot.png` 是**真实截图**，不是画的。界面上任何一处文案变了，这张图就该重截，
 否则 README 和市场详情页会跟实际界面对不上。
 
+`dsh web` 用进程令牌 cookie 鉴权，无头浏览器拿不到带令牌的地址（直接访问会 401），
+所以这张图只能人工在界面上截：设置 → 模型 → 列表最下面那一行。
+
+## 文档放在哪
+
+| 文件 | 给谁看 |
+|---|---|
+| `README.md` / `README.en.md` | 使用者。两版章节必须一一对应同序 |
+| `docs/troubleshooting.md` | 出问题的使用者：状态文件字段表、按症状查、回滚 |
+| `docs/how-it-works.md` | 想深挖的人：为什么 DSH 会漏记、三种触发、两条写通道、跑测试、跨版本维护 |
+| `CONTRIBUTING.md` | 贡献者 |
+| `docs/publish-checklist.md` | 维护者自己发布时用 |
+
+改了一处实现，对应那篇文档也要跟上——尤其是 `docs/how-it-works.md` 里的字段表和测试数量。
+
 ## 许可证
 
 贡献的代码按 [MIT](LICENSE) 授权。

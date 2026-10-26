@@ -1,13 +1,19 @@
 <div align="center">
-  <img src="assets/icon-180.png" width="96" alt="dsh-model-vision 图标">
+  <img src="https://raw.githubusercontent.com/charovo0059/dsh-model-vision/main/assets/icon-180.png" width="96" alt="dsh-model-vision 图标">
 
 # dsh-model-vision
 
 **让 DSH 自动认出哪些模型能看图。**
 
-能看图的模型自动勾上「输入类型：图片」，名字后面标出「· 可看图」——不用再手动一个个点，
-也不会下次点「获取可用模型」就被清掉。
+<sub>中文 · [English](README.en.md)</sub>
 
+能看图的模型自动勾上「输入类型：图片」，名字后面标出「· 可看图」——
+不用再手动一个个点，也不会下次点「获取可用模型」就被清掉。
+
+不用装额外的命令行工具，不用另配一把 key，也不用换网关。
+它只是把网关**本来就公布**的能力，补回 DSH 漏掉的那一格。
+
+[![test](https://github.com/charovo0059/dsh-model-vision/actions/workflows/test.yml/badge.svg)](https://github.com/charovo0059/dsh-model-vision/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-MIT-2EA44F?style=flat-square)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-339933?style=flat-square)](https://nodejs.org)
 [![DSH plugin](https://img.shields.io/badge/DSH-plugin-4D6BFE?style=flat-square)](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
@@ -15,7 +21,7 @@
 
 </div>
 
-![设置 → 模型 → 列表最下面那一行](docs/screenshot.png)
+<img src="https://raw.githubusercontent.com/charovo0059/dsh-model-vision/main/docs/screenshot.png" width="100%" alt="设置 → 模型，列表最下面那一行是「检测并补充视觉能力」">
 
 ---
 
@@ -33,17 +39,25 @@
 > **适合**：你用第三方网关 / 中转站 / 自建服务（任何 OpenAI 兼容地址），并且想让模型能看图。
 > **不适合**：模型本身就不吃图片。插件不会让只读文字的模型学会看图。
 
+**它不做什么**（这样你能放心装）：
+
+- 不会让只读文字的模型学会看图
+- 不会替你填 API key，不会改模型名字（除了末尾那个标注）、上下文长度、价格
+- 不会因为网关没说就自己猜一个能力
+- 不连任何第三方服务器，不上传对话内容，没有遥测
+
 ---
 
 ## 安装
 
 装完都要**重启 DSH**。
 
-### 从插件市场装（推荐）
-
 **设置 → 插件 → 插件市场** → 搜索 `dsh-model-vision` → 安装。
 
-> 还没上架时（或搜不到）用下面两种方式。
+> 还没上架时（或搜不到）用下面的方式。
+
+<details>
+<summary>从 GitHub 装 / 从本地目录装 / 装完自检 / 先看看它会改什么</summary>
 
 ### 从 GitHub 装
 
@@ -77,6 +91,8 @@ node tools/preview.mjs --profile web
 
 只读：读你的配置、问一次网关、把「会改哪几行」打出来，**一个字节都不写**，DSH 开着也能安全跑。
 
+</details>
+
 ---
 
 ## 怎么用
@@ -105,6 +121,8 @@ node tools/preview.mjs --profile web
    - 答成别的颜色（比如给它红色，它说 purple）→ 看不见图，判为只能读文字
    - 一个颜色都不提（回了一整段话）→ **没结论**，不写声明
 
+**沉默不等于纯文本。** 网关没说、探测也没问出来，它就什么都不写——宁可不写，也不写错。
+
 几个你会关心的事：
 
 | 你可能会问 | 答案 |
@@ -128,12 +146,7 @@ node tools/preview.mjs --profile web
 | Ollama | `/api/tags`（按模型名匹配） | ✅（要它自己答对才算） |
 | Responses 协议（`/responses`） | `/models` | 只看清单，不探测（它的图片格式不一样，乱猜会误判） |
 
-判断能力时它认这些写法：
-
-- **模态列表**：`input` → `input_modalities` → `inputModalities` → `architecture.input_modalities` → `modalities.input`
-- **布尔标记**：`vision` → `supports_vision` → `image_input` → `capabilities.vision`
-
-第一个真正表态的胜出。**全程沉默 = 没结论**，不猜。
+判断能力时它认哪些字段写法，见 [docs/how-it-works.md](docs/how-it-works.md)。
 
 ---
 
@@ -141,8 +154,7 @@ node tools/preview.mjs --profile web
 
 **最直观的**：设置 → 模型 → 找一个你确定能看图的模型 → 点开「输入类型」→「图片」已经勾上了。
 
-**看记账本**：每次干完活它都会写一份记录到 `~/.dsh/model-vision.<profile>.status.json`（`web` 这个 profile 就是 `model-vision.web.status.json`；没带 profile 名字的旧文件名也会被认）。
-**只看 `message` 这一行就够了**，那是给你写的人话：
+**看它留下的一句话**：每次干完活它会写一份记录，只看里面的 `message` 一行就够了：
 
 ```json
 {
@@ -160,15 +172,8 @@ node tools/preview.mjs --profile web
 | 出错了：…… | 后面跟的就是原因 |
 | 没有可检查的模型 | 还没配供应商，或者没点过「获取可用模型」 |
 
-想追细节再看这几个字段：
-
-| 字段 | 大白话 |
-|---|---|
-| `wrote` | 这次有没有真的改东西 |
-| `routes[].changes` | 改了哪几个模型 |
-| `routes[].listed` | 网关报了几个模型（0 = 网关没连上或没公布） |
-| `routes[].credential` | 用的哪份 key（`file` = 本地凭据文件，`absent` = 没找到） |
-| `error` | 出了什么错（没有就是 `null`） |
+记录在 `~/.dsh/model-vision.<profile>.status.json`（`web` 这个 profile 就是 `model-vision.web.status.json`）。
+想追细节（`wrote` / `routes[].changes` / `credential` 这些字段）看 [docs/troubleshooting.md](docs/troubleshooting.md)。
 
 ---
 
@@ -180,7 +185,7 @@ node tools/preview.mjs --profile web
 - 万一写坏了：改之前先备份 `~/.dsh/profiles/web/cordis.patch.yml`，出问题直接覆盖回去
 - 想让它只看不写：配置里加 `dryRun: true`，它照样记账，但不动你的文件
 
-### 它碰什么、不碰什么
+它碰什么：
 
 | 它要 | 用来做什么 |
 |---|---|
@@ -190,14 +195,6 @@ node tools/preview.mjs --profile web
 | 访问你填的那个 API 地址 | 读模型清单；探测时发两张 64×64 纯色图 |
 
 **不连任何第三方服务器**，不上传对话内容，不读你的会话记录，没有遥测。
-
-### 它不做什么
-
-- 不会让只读文字的模型学会看图
-- 不会替你填 API key
-- 不会改模型名字（除了末尾那个标注）、上下文长度、价格
-- 不会因为网关没说就自己猜一个能力
-- 不会动你没让它管的那些供应商
 
 ---
 
@@ -224,7 +221,7 @@ node tools/preview.mjs --profile web
 dsh plugin --profile web remove dsh-model-vision
 ```
 
-再把 `~/.dsh/profiles/web/package.json` 里 `dsh.profile.bundles` 的 `"dsh-model-vision"` 删掉，重启 DSH。
+重启 DSH 就干净了——`dsh plugin remove` 会同时把它从 `dsh.profile.bundles` 里摘掉，不用手改配置。
 
 已经勾上的「图片」会留着——那已经是你配置里正式的一项了，插件不负责回滚。想取消就手动去设置页把「图片」取消勾选。
 
@@ -255,120 +252,13 @@ dsh plugin --profile web remove dsh-model-vision
 
 ---
 
-## 名词小抄
-
-| 你会看到的词 | 意思 |
-|---|---|
-| 网关 / 中转站 | 你在「模型」设置里填「API 地址」的那个服务 |
-| 「获取可用模型」 | 设置 → 模型 里的按钮，点一下把网关的模型清单拉进来勾选 |
-| 「输入类型」 | 每个模型下面能勾「文字 / 图片」的那一组选项 |
-| 「能看图」的模型 | 支持图片输入的模型（多模态） |
-| 状态文件 | `~/.dsh/model-vision.<profile>.status.json`，它每次干活的记账本 |
-
----
-
-<details>
-<summary><b>技术细节（给想深挖的人）</b></summary>
-
-### 为什么 DSH 会漏记这一项
-
-DSH 的「获取可用模型」读的是 `@deepseek-ai/dsh-llm-pi-ai` 里的 `readListing()`，它每条只保留四个字段：
-
-```js
-id / name / contextWindow / maxTokens
-```
-
-`input`、`input_modalities`、`architecture.input_modalities`、`vision` —— 一个都不解析。
-于是每个模型走 `entry.input → 内置目录 → defaultInput`，而 `DEFAULT_INPUT = ["text"]`，带图请求在附件阶段就被拒：
-
-```
-LlmError: pi-ai model "<id>" does not support image input
-(category: UNSUPPORTED_CONTENT)
-```
-
-本插件读网关自己公布的能力，把 `input: [text, image]` 写回 `llm-pi-ai` 的模型条目。
-
-### 为什么标注写进名字，而不是画个小标签
-
-`conversation.input.model.label` 是 **single 插槽**，已经被 `dsh-client-ui-deepseek-model-label-1017` 占了；
-而 `ModelCatalogModel` 只有 `{ id, name, description, reasoning }`，没有能力字段。
-写进名字是唯一在所有地方都看得见的做法——切模型、设置页、会话头部都生效。
-
-### 三种触发
-
-- `start` —— 加载后 3 秒
-- `config-change` —— 每 5 秒比对一次组合配置的指纹，变了才请求网关
-- `interval` —— 每 5 分钟兜底
-
-> `config-change` 是指纹轮询而不是文件监听：profile 补丁路径的监听属于 Loader（`hmr.watchConfig` 拒绝第二次注册），插件插不进去。
-> 轮询只读组合后的配置、不打网络。写完一次后立刻采纳新指纹，避免自己的写入回声成第二次空 sweep。
-
-### 两条写通道
-
-优先 `ctx.configEditor.edit()`（带文件锁、schema 校验、Loader 重组）；
-热重载时报 `HMR transactions cannot be nested` 时，回落到按行改 `cordis.patch.yml`（临时文件 + rename，保 CRLF、保注释、绝不写重复的 `input` 键）。
-
-### 凭据解析
-
-`credentials` 服务 → 环境变量（`apiKeyEnv`）→ `~/.dsh/.credentials.yaml` 的 `refs`。
-实际用了哪条会记进状态记录的 `credential`，401 时先看它。
-
-### 一键按钮的接口
-
-`POST /plugins/model-vision/detect`（仅本机、需 `x-model-vision` 头、只接受 POST）。
-
-- body `{}` → 探测并补充
-- `{"dryRun":true}` → 只看不写
-- `{"route":"salt"}` → 只测一家
-
-返回 `{ ok, message, routes: [{ changes, held, probedModels, error }] }`，设置页只渲染这个。
-
-### 跑测试
-
-```bash
-npm test
-
-node test/vision.test.mjs     # 30 个：解析、决策、按行改文件、CRLF、幂等、人话摘要
-node test/wiring.test.mjs     # 10 个：两条写通道、dryRun、凭据、轮询、多 profile 状态文件
-node test/probe.test.mjs      # 12 个：图片字节、请求形状、四种判定（能看/不能看/没结论/故障）
-node test/oneclick.test.mjs   #  9 个：多路径清单、Ollama 形状、一键端点、缓存与上限
-node test/contract.test.mjs   #  7 个：前端与后端对同一批外部名字的约定
-```
-
-一共 68 个，全部零依赖、不联网（探测测试用本地假网关）。
-
-### 跨版本维护（DSH 升级后看这一节）
-
-这个插件只依赖四个外部名字，全部集中写在两处：
-
-| 名字 | 宿主 `lib/index.js` | 浏览器 `lib/client.js` |
-|---|---|---|
-| 请求路径 | `RPC_PATH` | `CONTRACT.rpcPath` |
-| 请求头 | `RPC_HEADER` | `CONTRACT.rpcHeader` |
-| 协议版本 | `PROTOCOL_VERSION` | `CONTRACT.protocol` |
-| 挂载插槽 | — | `CONTRACT.slot`（模型页底部） |
-
-`node test/contract.test.mjs` 会逐项比对两边。任何一边改了名字而另一边没跟上，这个测试立刻失败——不会等到用户点按钮时才发现。
-
-**DSH 升级后只要两步：**
-
-1. 跑 `node test/contract.test.mjs`。全绿 = 接口没变，什么都不用改。
-2. 如果红了，看它报哪个名字，改 `CONTRACT` 或宿主导出里那一行即可。
-
-已经内置的两条自愈：
-
-- **插槽被改名 / 移除**：模型页底部那个位置 4 秒内没注册成功，就自动退成「设置 → 视觉能力」单页，用同一个组件渲染，功能一样。
-- **后台没挂上**：按钮会直接说「后台服务没响应，重启一次 DSH 再试」，不会静默失败。
-
-</details>
-
----
-
 ## 参与
 
 - 发现 bug 或想加功能 → [开 issue](https://github.com/charovo0059/dsh-model-vision/issues)
 - 提 PR → 先看 [CONTRIBUTING.md](CONTRIBUTING.md)，改完跑 `npm test`
 - 换了新网关 / 新写法它能认但没认出来 → 带着网关的 `/models` 返回片段开 issue，那是最有用的反馈
+
+想深挖实现（为什么 DSH 会漏记、为什么标注写进名字、三种触发、两条写通道、一键按钮的接口、怎么跑测试）→ [docs/how-it-works.md](docs/how-it-works.md)
 
 ## 许可证
 

@@ -65,7 +65,7 @@ CI 会按顺序检查：条目数量（一 PR 最多 3 条）→ `dsh.bundle` �
 
 - `private` 已删（不删 npm 直接拒发）
 - `publishConfig.registry` 锁死官方源 —— **本机 `~/.npmrc` 指向 npmmirror 只读镜像，不锁的话 `npm publish` 会 403**
-- `files` 收窄到 17 个文件 / 57.5 kB（排除了 `docs/` 里那两张 300KB 的截图，npm 页面的图会回源 GitHub）
+- `files` 收窄到 20 个文件 / 66 kB（排除了 `docs/` 里的截图，README 的图走 GitHub 绝对地址；但保留 `assets/icon-180.png`，DSH 从 `package.json` 的 `icon` 字段读它，缺了插件列表就没图标）
 - `prepublishOnly` 已挂上 68 个测试，测试挂了发不出去
 
 ```bash
