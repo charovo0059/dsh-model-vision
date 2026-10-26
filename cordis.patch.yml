@@ -1,0 +1,69 @@
+# dsh-model-vision — bundle layer applied under the profile's own patch.
+#
+# Mounts the vision-declaration detector: it reads each gateway's own model
+# listing and keeps `llm-pi-ai`'s per-model `input` in sync, so a route that
+# serves images stops being declared text-only by the harness's "Fetch
+# available models" reader (which keeps id / name / contextWindow / maxTokens
+# and drops every modality field the gateway publishes).
+#
+# The values below are defaults. A profile can override any of them by repeating
+# this id in its own cordis.patch.yml — but `name` must match this layer's word
+# for word, or composeEntries skips that patch as a name mismatch.
+- insert:
+    - id: model-vision
+      name: dsh-model-vision
+      config:
+        # Which profile row owns the providers this plugin reads and rewrites.
+        entryId: llm-pi-ai
+        # [] = every listable route; list route names to narrow it.
+        routes: []
+        # fill: only complete a model that declares no `input` at all — an
+        #   explicit declaration stays its author's decision.
+        # sync: treat the gateway as the owner, so a stale declaration is
+        #   corrected in both directions (image added or removed).
+        mode: fill
+        # Re-sweep cadence, so a model added later is picked up without a
+        # restart. 0 = the start sweep still runs, but nothing after it.
+        intervalMs: 300000
+        # Delay before the start sweep, to let the profile finish loading.
+        # 0 = next tick.
+        startDelayMs: 3000
+        # How often the composed profile is cheaply fingerprinted (no network).
+        # When you save the Models page — including "Fetch available models" —
+        # the next tick notices and sweeps. 0 = only the start and interval
+        # sweeps. This is a poll, not a file watcher: the profile patch's watcher
+        # belongs to the Loader and refuses a second registration.
+        watchMs: 5000
+        # Per-endpoint model-listing timeout.
+        timeoutMs: 15000
+        # Whether the *background* sweeps may also send a real image to a model
+        # that declares nothing. Off by default: a probe costs a request per
+        # model, and nobody wants that on a timer. The settings page's
+        # 「一键检测并补充」 button always probes — that is what it was pressed for.
+        probe: false
+        # How many colours to ask per model. Two makes a blind guess wrong ~15/16
+        # of the time; the second round only runs when the first one passed.
+        probeRounds: 2
+        # Per-probe timeout (a probe may be a slow vision model).
+        probeTimeoutMs: 30000
+        # Cap on probes per sweep, so one press cannot burn a large quota.
+        # Models past the cap stay undeclared and are counted as skipped.
+        maxProbes: 40
+        # Where probe verdicts are remembered: '' = $DSH_HOME/model-vision.probe.json,
+        # false = never cache. A "yes" is trusted for a week, a "no" for a day.
+        probeCache: ''
+        # Appended to a model's display name once it is known to take images.
+        # The composer's model picker renders the name, and its label slot is a
+        # `single` slot the shipped 1017 labeller already owns, so a badge cannot
+        # be added from outside — the name is the one place every surface reads.
+        # Set to '' to leave display names alone.
+        badgeSuffix: ' · 可看图'
+        # Log the plan without writing anything. Useful while the harness runs.
+        dryRun: false
+        # Log every change and every model left alone (host logger may be
+        # invisible, so the status document matters more).
+        log: true
+        # Status document: '' = $DSH_HOME/model-vision.status.json, false = none.
+        # Read it first when asking "why did nothing happen": every load and
+        # sweep records listing counts, planned changes and the write channel.
+        statusFile: ''

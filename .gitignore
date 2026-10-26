@@ -1,0 +1,7 @@
+# 插件运行时产生的东西，不进仓库
+node_modules/
+*.log
+*.tmp
+
+# 这台机器上的运行记录
+_dry-overlay.yml

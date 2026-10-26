@@ -1,0 +1,48 @@
+# A trimmed copy of a real profile patch: same indentation, same comment
+# density, an unrelated row above the one under test.
+- id: ui-theme
+  name: "@deepseek-ai/dsh-client-ui-theme"
+  config:
+    preference: dark
+
+# ── the row this plugin owns ───────────────────────────────────────────
+- id: llm-pi-ai
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      salt:
+        apiKeyEnv: GATEWAY_KEY
+        api: openai-completions
+        baseURL: http://127.0.0.1:18900/v1
+        models:
+          - id: trae/deepseek-v4.1-flash
+            name: deepseek-v4.1-flash
+            contextWindow: 1048576
+          - id: raccoon/sn-deepseek-v4-1-flash
+            name: DeepSeek-V4.1-Flash · x0.25
+            contextWindow: 1000000
+            maxTokens: 100000
+          - id: raccoon/sn-deepseek-v4-1-flash-1017
+            name: DeepSeek-V4.1-Flash-1017 · 免费
+            contextWindow: 1000000
+            maxTokens: 100000
+          # an endpoint that publishes nothing still gets no declaration
+          - id: lobsterai/deepseek-flash
+            name: DeepSeek-V4.1-Flash · x0.05
+            contextWindow: 1000000
+          # the author declared text on purpose; fill mode must respect it
+          - id: buddy/deepseek-v4.1-flash
+            name: Deepseek-V4.1-Flash · x0.11
+            contextWindow: 1000000
+            maxTokens: 128000
+            input: [text]
+          # a block-style declaration, to prove the rewrite keeps one line
+          - id: workbuddy/deepseek-v4.1-flash
+            name: Deepseek-V4.1-Flash · x0.00→免费
+            contextWindow: 1000000
+            input:
+              - text
+- id: subagent
+  name: "@deepseek-ai/dsh-subagent"
+  config:
+    maxDepth: 2

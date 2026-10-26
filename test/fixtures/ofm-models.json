@@ -1,0 +1,310 @@
+{
+ "object": "list",
+ "data": [
+  {
+   "id": "big-pickle",
+   "object": "model",
+   "created": 1792998561,
+   "owned_by": "our-free-model",
+   "context_window": 262144,
+   "x_ofm_efforts": [
+    "light",
+    "balanced",
+    "deep"
+   ],
+   "x_ofm_effort_default": "balanced"
+  },
+  {
+   "id": "z-ai/glm-5.3",
+   "object": "model",
+   "created": 1792998561,
+   "owned_by": "our-free-model",
+   "context_window": 1048576,
+   "x_ofm_efforts": [
+    "low",
+    "high",
+    "max"
+   ],
+   "x_ofm_effort_default": "high"
+  },
+  {
+   "id": "openai/gpt-oss-20b",
+   "object": "model",
+   "created": 1792998561,
+   "owned_by": "our-free-model",
+   "context_window": 131072,
+   "x_ofm_efforts": [
+    "low",
+    "medium",
+    "high"
+   ],
+   "x_ofm_effort_default": "medium"
+  },
+  {
+   "id": "buddy/deepseek-v4.1-flash",
+   "object": "model",
+   "created": 0,
+   "owned_by": "buddy",
+   "name": "Deepseek-V4.1-Flash · x0.11",
+   "input": [
+    "text",
+    "image"
+   ],
+   "reasoning": {
+    "efforts": [
+     {
+      "id": "low",
+      "name": "Low",
+      "canonical": "low"
+     },
+     {
+      "id": "high",
+      "name": "High",
+      "canonical": "high"
+     },
+     {
+      "id": "max",
+      "name": "Max",
+      "canonical": "max"
+     }
+    ],
+    "default": "high",
+    "openai_efforts": [
+     "low",
+     "high",
+     "max"
+    ]
+   },
+   "channel": "buddy",
+   "vision": true,
+   "context_window": 1000000,
+   "max_tokens": 393216
+  },
+  {
+   "id": "workbuddy/deepseek-v4.1-flash",
+   "object": "model",
+   "created": 0,
+   "owned_by": "workbuddy",
+   "name": "Deepseek-V4.1-Flash · x0.00→免费",
+   "input": [
+    "text",
+    "image"
+   ],
+   "reasoning": {
+    "efforts": [
+     {
+      "id": "low",
+      "name": "Low",
+      "canonical": "low"
+     },
+     {
+      "id": "high",
+      "name": "High",
+      "canonical": "high"
+     },
+     {
+      "id": "max",
+      "name": "Max",
+      "canonical": "max"
+     }
+    ],
+    "default": "high",
+    "openai_efforts": [
+     "low",
+     "high",
+     "max"
+    ]
+   },
+   "channel": "workbuddy",
+   "vision": true,
+   "context_window": 1000000,
+   "max_tokens": 128000
+  },
+  {
+   "id": "trae/glm-5.3-flash",
+   "object": "model",
+   "created": 0,
+   "owned_by": "trae",
+   "name": "GLM-5.3-Flash · x0.08",
+   "input": [
+    "text",
+    "image"
+   ],
+   "reasoning": {
+    "efforts": [
+     {
+      "id": "light",
+      "name": "Light",
+      "canonical": "low"
+     },
+     {
+      "id": "high",
+      "name": "High",
+      "canonical": "high"
+     },
+     {
+      "id": "extra_high",
+      "name": "Extra High",
+      "canonical": "xhigh"
+     }
+    ],
+    "default": "extra_high",
+    "openai_efforts": [
+     "low",
+     "high",
+     "xhigh"
+    ]
+   },
+   "channel": "trae",
+   "vision": true,
+   "context_window": 1000000,
+   "max_tokens": 64000
+  },
+  {
+   "id": "trae/glm-5.3",
+   "object": "model",
+   "created": 0,
+   "owned_by": "trae",
+   "name": "GLM-5.3 · x0.78",
+   "input": [
+    "text"
+   ],
+   "reasoning": {
+    "efforts": [
+     {
+      "id": "light",
+      "name": "Light",
+      "canonical": "low"
+     },
+     {
+      "id": "high",
+      "name": "High",
+      "canonical": "high"
+     },
+     {
+      "id": "extra_high",
+      "name": "Extra High",
+      "canonical": "xhigh"
+     }
+    ],
+    "default": "extra_high",
+    "openai_efforts": [
+     "low",
+     "high",
+     "xhigh"
+    ]
+   },
+   "channel": "trae",
+   "vision": false,
+   "context_window": 1000000,
+   "max_tokens": 64000
+  },
+  {
+   "id": "trae/deepseek-v4.1-flash",
+   "object": "model",
+   "created": 0,
+   "owned_by": "trae",
+   "name": "DeepSeek-V4.1-Flash · x0.12→x0.06",
+   "input": [
+    "text",
+    "image"
+   ],
+   "reasoning": {
+    "efforts": [
+     {
+      "id": "light",
+      "name": "Light",
+      "canonical": "low"
+     },
+     {
+      "id": "high",
+      "name": "High",
+      "canonical": "high"
+     },
+     {
+      "id": "extra_high",
+      "name": "Extra High",
+      "canonical": "xhigh"
+     }
+    ],
+    "default": "high",
+    "openai_efforts": [
+     "low",
+     "high",
+     "xhigh"
+    ]
+   },
+   "channel": "trae",
+   "vision": true,
+   "context_window": 1000000,
+   "max_tokens": 64000
+  },
+  {
+   "id": "raccoon/sn-deepseek-v4-1-flash",
+   "object": "model",
+   "created": 0,
+   "owned_by": "raccoon",
+   "name": "DeepSeek-V4.1-Flash · x0.25",
+   "input": [
+    "text",
+    "image"
+   ],
+   "reasoning": {
+    "efforts": [
+     {
+      "id": "on",
+      "name": "开启",
+      "canonical": "high"
+     },
+     {
+      "id": "off",
+      "name": "关闭",
+      "canonical": "none"
+     }
+    ],
+    "default": "on",
+    "openai_efforts": [
+     "high",
+     "none"
+    ]
+   },
+   "channel": "raccoon",
+   "vision": true,
+   "context_window": 1000000,
+   "max_tokens": 100000
+  },
+  {
+   "id": "raccoon/sn-deepseek-v4-1-flash-1017",
+   "object": "model",
+   "created": 0,
+   "owned_by": "raccoon",
+   "name": "DeepSeek-V4.1-Flash-1017 · 免费",
+   "input": [
+    "text"
+   ],
+   "reasoning": {
+    "efforts": [
+     {
+      "id": "on",
+      "name": "开启",
+      "canonical": "high"
+     },
+     {
+      "id": "off",
+      "name": "关闭",
+      "canonical": "none"
+     }
+    ],
+    "default": "on",
+    "openai_efforts": [
+     "high",
+     "none"
+    ]
+   },
+   "channel": "raccoon",
+   "vision": false,
+   "context_window": 1000000,
+   "max_tokens": 100000
+  }
+ ]
+}
