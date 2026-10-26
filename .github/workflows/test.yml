@@ -58,13 +58,18 @@ jobs:
         run: |
           npm pack --dry-run 2>&1 | tail -40
           # A plugin installed from the market or from GitHub needs the patch
-          # file and both halves of the bundle inside the tarball.
-          npm pack --dry-run --json > /tmp/pack.json
+          # file, both halves of the bundle, and the icon inside the tarball.
+          #
+          # The JSON goes to a relative path on purpose: on Windows runners Git
+          # Bash's `/tmp` and Node's `/tmp` are different directories, so an
+          # absolute `/tmp/...` writes to one place and reads from another.
+          npm pack --dry-run --json > pack.json
           node -e '
-            const info = JSON.parse(require("node:fs").readFileSync("/tmp/pack.json", "utf8"))[0]
+            const info = JSON.parse(require("node:fs").readFileSync("pack.json", "utf8"))[0]
             const names = info.files.map((f) => f.path)
             const need = ["lib/index.js", "lib/client.js", "lib/probe.js", "cordis.patch.yml", "package.json", "README.md", "LICENSE", "assets/icon-180.png"]
             const missing = need.filter((f) => !names.includes(f))
             if (missing.length > 0) { console.error("missing from tarball: " + missing.join(", ")); process.exit(1) }
             console.log("tarball OK: " + names.length + " files, " + (info.size / 1024).toFixed(0) + " kB")
           '
+          rm -f pack.json
