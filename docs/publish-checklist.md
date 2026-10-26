@@ -64,3 +64,23 @@ npm publish --access public
 ```
 
 需要先 `npm login`，并且把 `package.json` 里的 `repository` / `homepage` 改成你的真实地址。之后市场条目会自动带上版本号和下载量。
+
+---
+
+## 附：PR 描述可以直接粘这段
+
+```
+Adds dsh-model-vision — fills in the vision capability that llm-pi-ai's
+"fetch models" reader drops.
+
+- Reads whatever modality shape the gateway publishes (input, input_modalities,
+  architecture.input_modalities, vision flags).
+- For gateways that publish nothing, probes with two solid-colour images and
+  only declares a model image-capable when it names both colours correctly; an
+  ambiguous answer leaves the model declared as-is.
+- Writes back `input` plus a "· 可看图" suffix on the display name, so the
+  composer's model picker shows it.
+- One button at the bottom of Settings → Models; idempotent, dryRun available.
+
+Category: vision. Repo declares dsh.bundle. Two screenshots via screenshots.json.
+```
