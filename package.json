@@ -1,6 +1,6 @@
 {
   "name": "dsh-model-vision",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "让 DSH 自动认出哪些模型能看图：点「获取可用模型」后自动补上「输入类型：图片」，并在模型名后标出「可看图」，不再报「模型不支持图片输入」",
   "keywords": [
     "dsh",

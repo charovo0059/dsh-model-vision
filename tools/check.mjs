@@ -94,9 +94,12 @@ if (!existsSync(patchPath)) {
   }
 }
 
-// 5. the status document, which is where "why nothing happened" is answered
-const statusPath = join(dshHome, 'model-vision.status.json')
-if (existsSync(statusPath)) {
+// 5. the status document, which is where "why nothing happened" is answered.
+// One file per profile, so two running profiles do not overwrite each other;
+// the un-suffixed name is what versions before 0.5.2 wrote.
+const statusCandidates = [join(dshHome, `model-vision.${profile}.status.json`), join(dshHome, 'model-vision.status.json')]
+const statusPath = statusCandidates.find((candidate) => existsSync(candidate))
+if (statusPath !== undefined) {
   try {
     const status = JSON.parse(readFileSync(statusPath, 'utf8'))
     ok('状态文档存在', `${status.phase} · ${status.updatedAt}`)
@@ -112,7 +115,7 @@ if (existsSync(statusPath)) {
     ok('状态文档存在（但读不出来）', statusPath)
   }
 } else {
-  console.log(`  \u001b[2m·\u001b[0m 还没有状态文档 —— 重启 DSH 后第一次 sweep 会写 ${statusPath}`)
+  console.log(`  \u001b[2m·\u001b[0m 还没有状态文档 —— 重启 DSH 后第一次 sweep 会写 ${statusCandidates[0]}`)
 }
 
 console.log(missing === 0 ? '\n\u001b[32m接线完整。\u001b[0m重启 DSH 后看状态文档确认第一次 sweep。\n' : `\n缺少 ${missing} 步。\n`)

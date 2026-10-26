@@ -9,7 +9,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
-import { mkdtempSync, readFileSync, writeFileSync, copyFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, writeFileSync, copyFileSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -68,6 +68,7 @@ function harness(baseURL, options = {}) {
     get: (service) => {
       if (service === 'configEditor') return editor
       if (service === 'credentials') return { resolve: async () => ({ value: 'test-key' }) }
+      if (service === 'profileContext' && options.profile !== undefined) return { name: options.profile }
       return undefined
     },
     effect: (run) => {
@@ -316,6 +317,35 @@ test('a profile edit is noticed by the signature poll, not by a file watcher', a
     assert.equal(after.wrote, true, 'and put the declaration back')
     assert.deepEqual(live()[0].input, ['text', 'image'])
   } finally {
+    await net.close()
+  }
+})
+
+test('two profiles writing the same DSH_HOME do not overwrite each other', async () => {
+  // Every profile shares one DSH_HOME, so the default status file has to carry
+  // the profile name: without it a second `dsh` boot replaces the running one's
+  // record with its own pid and its own patch path.
+  const net = await gateway()
+  const home = mkdtempSync(join(tmpdir(), 'model-vision-home-'))
+  const previous = process.env.DSH_HOME
+  process.env.DSH_HOME = home
+  try {
+    for (const profile of ['web', 'desktop']) {
+      const { ctx } = harness(net.baseURL, { profile })
+      apply(ctx, { intervalMs: 0, startDelayMs: 0, log: false })
+      await settle()
+    }
+
+    const web = JSON.parse(readFileSync(join(home, 'model-vision.web.status.json'), 'utf8'))
+    const desktop = JSON.parse(readFileSync(join(home, 'model-vision.desktop.status.json'), 'utf8'))
+    assert.equal(web.phase, 'sweep')
+    assert.equal(desktop.phase, 'sweep')
+    // Each document keeps its own pid, which is the thing a shared file destroyed.
+    assert.notEqual(web.pid, undefined)
+    assert.equal(existsSync(join(home, 'model-vision.status.json')), false, 'no shared file is written')
+  } finally {
+    if (previous === undefined) delete process.env.DSH_HOME
+    else process.env.DSH_HOME = previous
     await net.close()
   }
 })
