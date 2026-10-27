@@ -6,3 +6,8 @@ node_modules/
 # 这台机器上的运行记录
 HANDOFF.local.md
 _dry-overlay.yml
+
+# 临时放进来的 npm 凭据，发完就删
+.npmrc
+.publish-now.sh
+*.tgz
