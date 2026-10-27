@@ -38,15 +38,30 @@ dsh plugin --profile test add github:charovo0059/dsh-model-vision
 装完记得 `dsh plugin --profile test remove dsh-model-vision` 再把 `~/.dsh/profiles/test` 删掉，
 别留在机器上（`dsh plugin remove` 会同时把它从 `dsh.profile.bundles` 里摘掉）。
 
-## 3. 提市场条目
+## 3. 提市场条目（已完成）
+
+PR：<https://github.com/awesome-dsh-plugin/awesome-dsh-plugin/pull/9918>
+
+这是当时走的步骤，留档给以后提新条目：
 
 1. fork [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
-2. 把 `docs/market-entry.yml` 复制成 `data/plugins/charovo0059__dsh-model-vision.yml`（**恰好一层深**，`readEntries()` 只 glob `data/plugins/*.yml` 不递归）
+2. 把 `docs/market-entry.yml` 的**注释删掉**，正文复制成 `data/plugins/charovo0059__dsh-model-vision.yml`（**恰好一层深**，`readEntries()` 只 glob `data/plugins/*.yml` 不递归）
 3. 条目里的 `url` / `name` / `icon` 已经是真实地址，不需要替换占位符
 4. 提 PR，标题写「Add dsh-model-vision」，body 用 `docs/pr-body.md`
 
-CI 会按顺序检查：条目数量（一 PR 最多 3 条）→ `dsh.bundle` → 仓库满 1 天 → `awesome-lint`。
-**仓库今天刚建的话，第 3 项会挂**，等一天再提。
+CI 分两道：`check`（条目数量 / 目录层级 / awesome-lint / build）和 `Submission gate`（`dsh.bundle` / 仓库满 1 天 / commit 数）。
+**仓库今天刚建的话，gate 会挂**，等一天再提。
+
+提之前可以本地先跑一遍 gate，省得等 CI：
+
+```bash
+cd <市场仓库>
+GITHUB_TOKEN=<你的 token> node scripts/check-submission.mjs --base <upstream 的 main sha>
+# 期望：checking 1 entry / ok  https://github.com/… / all checked entries pass
+```
+
+`fork` 落后 upstream 时，`git fetch` 常常被墙（`Recv failure: Connection was reset`），
+但 API 通：`POST /repos/<你>/awesome-dsh-plugin/merge-upstream` body `{"branch":"main"}` 就能快进同步。
 
 ## 4. 截图与图标
 
