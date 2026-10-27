@@ -14,6 +14,7 @@
 它只是把网关**本来就公布**的能力，补回 DSH 漏掉的那一格。
 
 [![test](https://github.com/charovo0059/dsh-model-vision/actions/workflows/test.yml/badge.svg)](https://github.com/charovo0059/dsh-model-vision/actions/workflows/test.yml)
+[![npm](https://img.shields.io/npm/v/dsh-model-vision?style=flat-square&color=CB3837)](https://www.npmjs.com/package/dsh-model-vision)
 [![License](https://img.shields.io/badge/license-MIT-2EA44F?style=flat-square)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-339933?style=flat-square)](https://nodejs.org)
 [![DSH plugin](https://img.shields.io/badge/DSH-plugin-4D6BFE?style=flat-square)](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
@@ -52,15 +53,15 @@
 
 装完都要**重启 DSH**。
 
-插件市场还在审核，暂时用命令行装：
-
 ```bash
-dsh plugin --profile web add github:charovo0059/dsh-model-vision
+dsh plugin --profile web add dsh-model-vision
 ```
 
 这条命令会同时把插件登记进 `dsh.profile.bundles`，不用手改配置。
 如果你用的不是默认 profile，把 `web` 换成你的 profile 名。
 
+> 也支持从 GitHub 装（想跟仓库最新代码走的话）：`dsh plugin --profile web add github:charovo0059/dsh-model-vision`
+>
 > 上架之后也可以走 **设置 → 插件 → 插件市场** → 搜索 `dsh-model-vision` → 安装，效果一样。
 
 <details>

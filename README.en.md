@@ -13,6 +13,7 @@ No extra CLI to install, no second API key, no need to switch gateways.
 It only puts back a capability your gateway **already advertises** but DSH dropped.
 
 [![test](https://github.com/charovo0059/dsh-model-vision/actions/workflows/test.yml/badge.svg)](https://github.com/charovo0059/dsh-model-vision/actions/workflows/test.yml)
+[![npm](https://img.shields.io/npm/v/dsh-model-vision?style=flat-square&color=CB3837)](https://www.npmjs.com/package/dsh-model-vision)
 [![License](https://img.shields.io/badge/license-MIT-2EA44F?style=flat-square)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-339933?style=flat-square)](https://nodejs.org)
 [![DSH plugin](https://img.shields.io/badge/DSH-plugin-4D6BFE?style=flat-square)](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
@@ -54,15 +55,16 @@ This plugin puts that field back.
 
 Restart DSH afterwards.
 
-The market listing is still under review, so install from the command line for now:
-
 ```bash
-dsh plugin --profile web add github:charovo0059/dsh-model-vision
+dsh plugin --profile web add dsh-model-vision
 ```
 
 This also registers the plugin in `dsh.profile.bundles`; no config editing needed.
 Replace `web` with your profile name if you use a different one.
 
+> You can also install straight from GitHub if you want to track the repo:
+> `dsh plugin --profile web add github:charovo0059/dsh-model-vision`
+>
 > Once it is listed you can also use **Settings → Plugins → Plugin Market** → search `dsh-model-vision` → Install.
 
 <details>
